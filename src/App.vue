@@ -1,15 +1,16 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <Card><Carousel></Carousel></Card>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Card from './components/Card.vue'
+import Carousel from './components/Carousel.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Card,
+    Carousel
   }
 }
 </script>
@@ -17,10 +18,17 @@ export default {
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+   width: 70%;
+   height: 100%;
+}
+
+body {
+   width: 100%;
+   height: 100vh;
+  margin: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgb(218, 217, 217);
 }
 </style>
