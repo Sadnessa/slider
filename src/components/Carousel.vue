@@ -3,20 +3,8 @@
     <div class="carousel__button carousel__button--left" @click="prev">L</div>
     <div class="carousel__button carousel__button--right" @click="next">R</div>
     <div class="carousel__content" :style="{ 'margin-left': margin }">
-      <div class="slideimg" >
-        <img
-          src="https://i.pinimg.com/564x/6b/82/80/6b828049f5942cd00702a9fd836fb627.jpg"
-        />
-      </div>
-      <div class="slideimg">
-        <img
-          src="https://i.pinimg.com/564x/58/d1/e5/58d1e566ad7f1f5034df12dc4719dd61.jpg"
-        />
-      </div>
-      <div class="slideimg">
-        <img
-          src="https://i.pinimg.com/736x/7a/80/53/7a80534a7ee888b537d7a29486770d1b.jpg"
-        />
+      <div class="slideimg" v-for="image in images" :key="image">
+        <img :src="image"/>
       </div>
     </div>
   </div>
@@ -24,6 +12,13 @@
 
 <script>
 export default {
+  props: {
+    images: {
+      type: Array,
+      required: true,
+    },
+  },
+
   data() {
     return {
       currentSlide: 0,
@@ -31,20 +26,25 @@ export default {
   },
 
   computed: {
-      margin() {
-          return this.currentSlide * -100 + '%'
-      }
+    margin() {
+      return this.currentSlide * -100 + "%";
+    },
   },
 
   methods: {
     next() {
-        this.currentSlide += 1
+      if (this.currentSlide === this.images.length - 1) {
+        return
+      }
+      this.currentSlide += 1;
     },
 
-prev() {
-        this.currentSlide -= 1
+    prev() {
+      if(this.currentSlide === 0) {
+        return
+      }
+      this.currentSlide -= 1;
     },
-
   },
 };
 </script>
@@ -81,6 +81,7 @@ prev() {
     width: 100%;
     height: 100%;
     white-space: nowrap;
+    transition: all 0.3s ease-in-out;
 
     .slideimg {
       display: inline-flex;
