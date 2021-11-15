@@ -1,10 +1,23 @@
 <template>
   <div class="carousel">
-    <div class="carousel__button carousel__button--left" @click="prev">L</div>
-    <div class="carousel__button carousel__button--right" @click="next">R</div>
+    <div class="carousel__button carousel__button--left" @click="prev">
+      <span class="material-icons"> chevron_left </span>
+    </div>
+    <div class="carousel__button carousel__button--right" @click="next">
+      <span class="material-icons"> chevron_right </span>
+    </div>
+    <div class="indicators">
+      <div
+        class="carousel__button carousel__button--small"
+        v-for="i in images.length"
+        :key="i"
+        :class="{ 'carousel__button--active': i-1 == currentSlide }"
+      @click="indicator(i-1)"
+      ></div>
+    </div>
     <div class="carousel__content" :style="{ 'margin-left': margin }">
       <div class="slideimg" v-for="image in images" :key="image">
-        <img :src="image"/>
+        <img :src="image" />
       </div>
     </div>
   </div>
@@ -34,17 +47,23 @@ export default {
   methods: {
     next() {
       if (this.currentSlide === this.images.length - 1) {
-        return
+        this.currentSlide = 0
+        return;
       }
       this.currentSlide += 1;
     },
 
     prev() {
-      if(this.currentSlide === 0) {
-        return
+      if (this.currentSlide === 0) {
+        this.currentSlide = this.images.length-1
+        return;
       }
       this.currentSlide -= 1;
     },
+
+    indicator(i) {
+      this.currentSlide = i;
+    }
   },
 };
 </script>
@@ -59,21 +78,60 @@ export default {
   position: relative;
   overflow: hidden;
 
-  &__button {
-    background-color: rgb(37, 37, 37);
+  .indicators {
+    width: 100%;
     position: absolute;
-    top: 50%;
+    bottom: 10px;
+    display: flex;
+    justify-content: center;
+
+    & > * {
+      margin: 0 5px;
+    }
+  }
+
+  &__button {
+    background-color: rgba(37, 37, 37, 0.5);
     border-radius: 50%;
     height: 30px;
     width: 30px;
-    transform: translateY(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      background: rgba(100, 100, 100, 0.5);
+      color: rgb(77, 77, 77);
+    }
+
+    &--active {
+      background: rgba(53, 53, 53, 0.5);
+      border: 3px solid;
+      border-color: rgba(255, 255, 255, 0.5);
+      box-sizing: border-box;
+    }
 
     &--right {
       right: 15px;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
     }
 
     &--left {
       left: 15px;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    &--small {
+      height: 15px;
+      width: 15px;
     }
   }
 
