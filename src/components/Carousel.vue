@@ -33,12 +33,18 @@ export default {
   },
 
   mounted() {
-    this.myIntr = setInterval(() => { 
-      if (this.currentSlide === this.images.length - 1) {
-        this.currentSlide = 0;
-        return
+    this.myIntr = setInterval(() => {
+      // if (this.currentSlide === this.images.length - 1) {
+      //   this.currentSlide = 0;
+      //   return
+      // }
+      if (this.currentSlide === 0) {
+        this.direction = 1;
       }
-      this.currentSlide += 1;
+      if (this.currentSlide === this.images.length - 1) {
+        this.direction = -1;
+      }
+      this.currentSlide += this.direction;
     }, 2000);
   },
 
@@ -49,6 +55,7 @@ export default {
   data() {
     return {
       currentSlide: 0,
+      direction: 1,
     };
   },
 
