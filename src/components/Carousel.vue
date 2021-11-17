@@ -11,8 +11,8 @@
         class="carousel__button carousel__button--small"
         v-for="i in images.length"
         :key="i"
-        :class="{ 'carousel__button--active': i-1 == currentSlide }"
-      @click="indicator(i-1)"
+        :class="{ 'carousel__button--active': i - 1 == currentSlide }"
+        @click="indicator(i - 1)"
       ></div>
     </div>
     <div class="carousel__content" :style="{ 'margin-left': margin }">
@@ -32,6 +32,19 @@ export default {
     },
   },
 
+  mounted() {
+    this.myIntr = setInterval(() => {
+      this.currentSlide += 1;
+      if (this.currentSlide === this.images.length) {
+        this.currentSlide = 0;
+      }
+    }, 2000);
+  },
+
+  beforeUnmount() {
+    clearInterval(this.myIntr);
+  },
+
   data() {
     return {
       currentSlide: 0,
@@ -47,7 +60,7 @@ export default {
   methods: {
     next() {
       if (this.currentSlide === this.images.length - 1) {
-        this.currentSlide = 0
+        this.currentSlide = 0;
         return;
       }
       this.currentSlide += 1;
@@ -55,7 +68,7 @@ export default {
 
     prev() {
       if (this.currentSlide === 0) {
-        this.currentSlide = this.images.length-1
+        this.currentSlide = this.images.length - 1;
         return;
       }
       this.currentSlide -= 1;
@@ -63,7 +76,7 @@ export default {
 
     indicator(i) {
       this.currentSlide = i;
-    }
+    },
   },
 };
 </script>
