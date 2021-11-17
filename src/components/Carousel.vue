@@ -33,11 +33,12 @@ export default {
   },
 
   mounted() {
-    this.myIntr = setInterval(() => {
-      this.currentSlide += 1;
-      if (this.currentSlide === this.images.length) {
+    this.myIntr = setInterval(() => { 
+      if (this.currentSlide === this.images.length - 1) {
         this.currentSlide = 0;
+        return
       }
+      this.currentSlide += 1;
     }, 2000);
   },
 
