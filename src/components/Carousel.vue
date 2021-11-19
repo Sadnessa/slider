@@ -1,12 +1,14 @@
 <template>
   <div class="carousel">
-    <div class="carousel__button carousel__button--left" @click="prev">
+    <template v-if="!hideArrows"> 
+      <div class="carousel__button carousel__button--left" @click="prev" >
       <span class="material-icons"> chevron_left </span>
     </div>
     <div class="carousel__button carousel__button--right" @click="next">
       <span class="material-icons"> chevron_right </span>
     </div>
-    <div class="indicators">
+    </template>
+    <div class="indicators" v-if="!hideIndicators">
       <div
         class="carousel__button carousel__button--small"
         v-for="i in images.length"
@@ -35,14 +37,24 @@ export default {
       required: true,
     },
 
+    hideArrows: {
+      type: Boolean,
+      default: false,
+    },
+
+    hideIndicators: {
+      type: Boolean,
+      default: false,
+    },
+
     verticalScroll: {
       type: Boolean,
-      default: true,
+      default: false,
     },
 
     autoscroll: {
       type: Boolean,
-      default: true,
+      default: false,
     },
 
     autoscrollIntr: {
@@ -111,7 +123,7 @@ export default {
 
     stopAutoscroll() {
       clearInterval(this.myIntr);
-      if (this.startIntr) {
+      if (this.startIntr || this.autoscroll == false) {
         return;
       }
       this.startIntr = setTimeout(() => {
