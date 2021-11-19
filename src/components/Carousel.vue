@@ -1,13 +1,14 @@
 <template>
   <div class="carousel">
-    <template v-if="!hideArrows"> 
-      <div class="carousel__button carousel__button--left" @click="prev" >
-      <span class="material-icons"> chevron_left </span>
-    </div>
-    <div class="carousel__button carousel__button--right" @click="next">
-      <span class="material-icons"> chevron_right </span>
-    </div>
+    <template v-if="!hideArrows">
+      <div class="carousel__button carousel__button--left" @click="prev">
+        <span class="material-icons"> chevron_left </span>
+      </div>
+      <div class="carousel__button carousel__button--right" @click="next">
+        <span class="material-icons"> chevron_right </span>
+      </div>
     </template>
+
     <div class="indicators" v-if="!hideIndicators">
       <div
         class="carousel__button carousel__button--small"
@@ -17,6 +18,7 @@
         @click="indicator(i - 1)"
       ></div>
     </div>
+
     <div
       class="carousel__content"
       :style="cstyle"
@@ -230,6 +232,7 @@ export default {
       justify-content: center;
       width: 100%;
       height: 100%;
+      overflow: hidden;
     }
 
     &--vertical {
@@ -241,8 +244,8 @@ export default {
     }
 
     img {
-      max-height: 100%;
-      max-width: 100%;
+     height: 100%;
+      width: auto;
       border-radius: 10px;
     }
   }
