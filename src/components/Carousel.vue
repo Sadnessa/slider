@@ -15,7 +15,11 @@
         @click="indicator(i - 1)"
       ></div>
     </div>
-    <div class="carousel__content" :style="{ 'margin-left': margin }">
+    <div
+      class="carousel__content"
+      :style="cstyle"
+      :class="{ 'carousel__content--vertical': verticalScroll }"
+    >
       <div class="slideimg" v-for="image in images" :key="image">
         <img :src="image" />
       </div>
@@ -30,26 +34,31 @@ export default {
       type: Array,
       required: true,
     },
+
+    verticalScroll: {
+      type: Boolean,
+      default: true,
+    },
+
+    autoscroll: {
+      type: Boolean,
+      default: true,
+    },
+
+    autoscrollIntr: {
+      type: Number,
+      default: 2000,
+    },
   },
 
   mounted() {
-    this.myIntr = setInterval(() => {
-      // if (this.currentSlide === this.images.length - 1) {
-      //   this.currentSlide = 0;
-      //   return
-      // }
-      if (this.currentSlide === 0) {
-        this.direction = 1;
-      }
-      if (this.currentSlide === this.images.length - 1) {
-        this.direction = -1;
-      }
-      this.currentSlide += this.direction;
-    }, 2000);
+    if (this.autoscroll == true) {
+      this.startAutoscroll();
+    }
   },
 
   beforeUnmount() {
-    clearInterval(this.myIntr);
+    this.stopAutoscroll();
   },
 
   data() {
@@ -60,13 +69,25 @@ export default {
   },
 
   computed: {
-    margin() {
+    cstyle() {
+      if (this.verticalScroll == true) {
+        return {
+          transform: "translateY(" + this.offset + ")",
+        };
+      }
+      return {
+        "margin-left": this.offset,
+      };
+    },
+
+    offset() {
       return this.currentSlide * -100 + "%";
     },
   },
 
   methods: {
     next() {
+      this.stopAutoscroll();
       if (this.currentSlide === this.images.length - 1) {
         this.currentSlide = 0;
         return;
@@ -75,6 +96,7 @@ export default {
     },
 
     prev() {
+      this.stopAutoscroll();
       if (this.currentSlide === 0) {
         this.currentSlide = this.images.length - 1;
         return;
@@ -83,7 +105,35 @@ export default {
     },
 
     indicator(i) {
+      this.stopAutoscroll();
       this.currentSlide = i;
+    },
+
+    stopAutoscroll() {
+      clearInterval(this.myIntr);
+      if (this.startIntr) {
+        return;
+      }
+      this.startIntr = setTimeout(() => {
+        this.startAutoscroll();
+        this.startIntr = null;
+      }, 2000);
+    },
+
+    startAutoscroll() {
+      this.myIntr = setInterval(() => {
+        // if (this.currentSlide === this.images.length - 1) {
+        //   this.currentSlide = 0;
+        //   return
+        // }
+        if (this.currentSlide === 0) {
+          this.direction = 1;
+        }
+        if (this.currentSlide === this.images.length - 1) {
+          this.direction = -1;
+        }
+        this.currentSlide += this.direction;
+      }, this.autoscrollIntr);
     },
   },
 };
@@ -123,6 +173,7 @@ export default {
     cursor: pointer;
     user-select: none;
     transition: all 0.2s ease-in-out;
+    z-index: 1;
 
     &:hover {
       background: rgba(100, 100, 100, 0.5);
@@ -167,6 +218,14 @@ export default {
       justify-content: center;
       width: 100%;
       height: 100%;
+    }
+
+    &--vertical {
+      white-space: normal;
+
+      .slideimg {
+        display: flex;
+      }
     }
 
     img {
