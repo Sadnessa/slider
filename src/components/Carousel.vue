@@ -1,10 +1,10 @@
 <template>
   <div class="carousel">
     <template v-if="!hideArrows">
-      <div class="carousel__button carousel__button--left" @click="prev">
+      <div class="carousel__button carousel__button--left" @click="prev" v-if="!hidePrevButton">
         <span class="material-icons"> chevron_left </span>
       </div>
-      <div class="carousel__button carousel__button--right" @click="next">
+      <div class="carousel__button carousel__button--right" @click="next" v-if="!hideNextButton">
         <span class="material-icons"> chevron_right </span>
       </div>
     </template>
@@ -59,9 +59,14 @@ export default {
       default: false,
     },
 
-    autoscrollIntr: {
+    autoscrollInterval: {
       type: Number,
       default: 2000,
+    },
+
+    loop: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -97,13 +102,29 @@ export default {
     offset() {
       return this.currentSlide * -100 + "%";
     },
+
+    hidePrevButton() {
+      if (this.loop == true) {
+        return false;
+      }
+      return this.currentSlide == 0;
+    },
+
+    hideNextButton() {
+      if (this.loop == true) {
+        return false;
+      }
+      return this.currentSlide == this.images.length - 1;
+    },
   },
 
   methods: {
     next() {
       this.stopAutoscroll();
       if (this.currentSlide === this.images.length - 1) {
-        this.currentSlide = 0;
+        if (this.loop == true) {
+          this.currentSlide = 0;
+        }
         return;
       }
       this.currentSlide += 1;
@@ -112,7 +133,9 @@ export default {
     prev() {
       this.stopAutoscroll();
       if (this.currentSlide === 0) {
-        this.currentSlide = this.images.length - 1;
+        if (this.loop == true) {
+          this.currentSlide = this.images.length - 1;
+        }
         return;
       }
       this.currentSlide -= 1;
@@ -147,7 +170,7 @@ export default {
           this.direction = -1;
         }
         this.currentSlide += this.direction;
-      }, this.autoscrollIntr);
+      }, this.autoscrollInterval);
     },
   },
 };
@@ -244,7 +267,7 @@ export default {
     }
 
     img {
-     height: 100%;
+      height: 100%;
       width: auto;
       border-radius: 10px;
     }
