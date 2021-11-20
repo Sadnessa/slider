@@ -1,10 +1,18 @@
 <template>
   <div class="carousel" :style="{ height }">
     <template v-if="!hideArrows">
-      <div class="carousel__button carousel__button--left" @click="prev" v-if="!hidePrevButton">
+      <div
+        class="carousel__button carousel__button--left"
+        @click="prev"
+        v-if="!hidePrevButton"
+      >
         <span class="material-icons"> chevron_left </span>
       </div>
-      <div class="carousel__button carousel__button--right" @click="next" v-if="!hideNextButton">
+      <div
+        class="carousel__button carousel__button--right"
+        @click="next"
+        v-if="!hideNextButton"
+      >
         <span class="material-icons"> chevron_right </span>
       </div>
     </template>
@@ -15,7 +23,7 @@
         v-for="i in images.length"
         :key="i"
         :class="{ 'carousel__button--active': i - 1 == currentSlide }"
-        @click="indicator(i - 1)"
+        @click="goTo(i - 1)"
       ></div>
     </div>
 
@@ -72,7 +80,7 @@ export default {
     height: {
       type: String,
       default: "500px",
-    }
+    },
   },
 
   mounted() {
@@ -146,7 +154,7 @@ export default {
       this.currentSlide -= 1;
     },
 
-    indicator(i) {
+    goTo(i) {
       this.stopAutoscroll();
       this.currentSlide = i;
     },
