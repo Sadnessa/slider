@@ -1,5 +1,5 @@
 <template>
-  <div class="carousel">
+  <div class="carousel" :style="{ height }">
     <template v-if="!hideArrows">
       <div class="carousel__button carousel__button--left" @click="prev" v-if="!hidePrevButton">
         <span class="material-icons"> chevron_left </span>
@@ -68,6 +68,11 @@ export default {
       type: Boolean,
       default: false,
     },
+
+    height: {
+      type: String,
+      default: "500px",
+    }
   },
 
   mounted() {
@@ -179,7 +184,7 @@ export default {
 <style lang="scss" scoped>
 .carousel {
   width: 70%;
-  height: 50%;
+  height: 500px;
   background: white;
   box-shadow: -1px -1px 15px -2px rgba(34, 60, 80, 0.2);
   border-radius: 10px;
